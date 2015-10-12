@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 /**
  *
@@ -18,8 +20,13 @@ import java.net.UnknownHostException;
  */
 public class Client {
     
+    //Connexion UDP
     private DatagramSocket dgSocket;
     private DatagramPacket dgPacket;
+    //Connexion TCP
+    private ServerSocket socket;
+    //Serial 
+    public static int TCP_PORT_SERIAL = 51000;
     
     public Client(int port) throws UnknownHostException, SocketException, IOException {
         dgSocket = new DatagramSocket(port);
@@ -27,11 +34,19 @@ public class Client {
     }
     
     private void go() throws UnknownHostException, IOException {
-        send("CONNECTION");
+        System.out.print("> ");
+        Scanner sc = new Scanner(System.in);
+        String cmd;
+        while (!(cmd = sc.nextLine()).equals("quit")) {
+            if (cmd.equals("connect"))
+                send("CONNECTION");
+            System.out.print("> ");
+        }
     }
     
     private void send(String msg) throws UnknownHostException, IOException {
-        dgPacket = new DatagramPacket(new byte[1024], 1024, InetAddress.getByName("localhost"), server.Server.UDP_PORT);
+        dgPacket = new DatagramPacket(new byte[1024], 1024, InetAddress.getByName("localhost"),
+                server.Server.UDP_PORT);
         dgPacket.setData(msg.getBytes());
         dgSocket.send(dgPacket);
     }

@@ -17,8 +17,11 @@ import java.net.UnknownHostException;
  */
 public class Server {
     
+    //Ports de communication
     public static int UDP_PORT = 1963;
+    public static int TCP_PORT = 2001;
     
+    //Connexion UDP
     private DatagramSocket dgSocket;
     private DatagramPacket dgPacket;
     
@@ -29,8 +32,9 @@ public class Server {
     }
     
     private void go() throws IOException {
-        if (receive().equals("CONNECTION"))
-            System.out.println("Connexion acceptée.");
+        if (receive().contains("CONNECTION"))
+            System.out.println("Connexion acceptée de " + dgPacket.getAddress() 
+                    + ":" + dgPacket.getPort());
         else
             System.out.println("Connexion refusée");
     }
